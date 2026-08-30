@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* *{
+        margin: 20px ;
+        padding: 20px 20px; */
+/* } */
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;    
+        border: solid 2px black;
+    }
+    .container{
+        height: 100vh;
+        width: auto;
+        border: solid 2px black;
+    }
+    .items{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        border: solid 2px black;
+    }
+    .item0, .item1, .item2, .item3, .item4, .item5, .item6, .item7, .item8, .item9{
+        display: flex;
+        margin: 20px;
+        padding: 10px;
+        height: auto;  
+        width: 130px;
+        border: solid 2px black;
+    }
+
+</style>
+<body>
+    <header>
+        <h1>Shop</h1>
+        <div class="totcart">
+            <span>Items in Cart:</span>
+            <span id="cart-count">0</span>
+        </div>
+    </header>
+
+
+
+    <div class="container">
+        <div class="middle">
+            <h2>products</h2>
+            <div class="items">
+
+                <div class="item0">
+                    <div>
+                        <h3>Product 1</h3>
+                        <p>$19.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                 <div class="item1">
+                    <div>
+                        <h3>Product 2</h3>
+                        <p>$29.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                 <div class="item2">
+                    <div>
+                        <h3>Product 3</h3>
+                        <p>$39.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                 <div class="item3">
+                    <div>
+                        <h3>Product 4</h3>
+                        <p>$49.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="item4">
+                    <div>
+                        <h3>Product 5</h3>
+                        <p>$59.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="item5">
+                    <div>
+                        <h3>Product 6</h3>
+                        <p>$69.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="item6">
+                    <div>
+                        <h3>Product 7</h3>
+                        <p>$79.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="item7">
+                    <div>
+                        <h3>Product 8</h3>
+                        <p>$89.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="item8">
+                    <div>
+                        <h3>Product 9</h3>
+                        <p>$99.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="item9">
+                    <div>
+                        <h3>Product 10</h3>
+                        <p>$109.99</p>
+                        <button>Add to Cart</button>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+
+
+
+        <div class="bottom">
+            <h2>Cart</h2>
+            <div class="cart-items" id="cart-items">
+                <p>Your cart is empty.</p>
+                
+                <br>
+
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span id="cart-total-price">$0.00</span>
+                    </div>
+                    <button class="btn-clear" id="btn-clear">Clear Cart</button>
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+<script>
+    // Variables to hold our data
+    var cartItems = [];
+    var cartTotal = 0;
+
+    // Get HTML elements by their IDs
+    var cartCountSpan = document.getElementById("cart-count");
+    var cartItemsDiv = document.getElementById("cart-items");
+
+    // Get all "Add to Cart" buttons
+    var buttons = document.querySelectorAll(".items button");
+
+    // Loop through every button and add a click event
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener("click", function(event) {
+            // Find the product title and price near the clicked button
+            var card = event.target.parentElement;
+            var title = card.querySelector("h3").innerText;
+            var priceText = card.querySelector("p").innerText;
+            
+            // Convert price text "$19.99" to a real number 19.99
+            var price = parseFloat(priceText.replace("$", ""));
+
+            // Add the item to our list
+            addToCart(title, price);
+        });
+    }
+
+    // Function to add item to cart
+    function addToCart(title, price) {
+        // Create an object for the item
+        var item = {
+            name: title,
+            price: price
+        };
+
+        // Add to array
+        cartItems.push(item);
+
+        // Update the screen
+        updateCartDisplay();
+    }
+
+    // Function to redraw the cart and recalculate totals
+    function updateCartDisplay() {
+        // 1. Update total count in header
+        cartCountSpan.innerText = cartItems.length;
+
+        // 2. Clear out the current cart display
+        cartItemsDiv.innerHTML = "";
+
+        // If empty, show message
+        if (cartItems.length === 0) {
+            cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+            return;
+        }
+
+        // 3. Reset total price calculation
+        cartTotal = 0;
+
+        // Loop through all items in the cart
+        for (var i = 0; i < cartItems.length; i++) {
+            var item = cartItems[i];
+            
+            // Add price to running total
+            cartTotal = cartTotal + item.price;
+
+            // Make a new paragraph for each item
+            var p = document.createElement("p");
+            p.innerText = item.name + " - $" + item.price.toFixed(2);
+            cartItemsDiv.appendChild(p);
+        }
+
+        // 4. Create and append the summary section
+        var summaryDiv = document.createElement("div");
+        summaryDiv.className = "cart-summary";
+        summaryDiv.innerHTML = `
+            <div class="cart-total">
+                <span>Total: </span>
+                <span id="cart-total-price">$${cartTotal.toFixed(2)}</span>
+            </div>
+            <button id="btn-clear">Clear Cart</button>
+        `;
+        cartItemsDiv.appendChild(summaryDiv);
+
+        // Add event listener to the newly created Clear button
+        var clearBtn = document.getElementById("btn-clear");
+        clearBtn.addEventListener("click", clearCart);
+    }
+
+    // Function to clear everything
+    function clearCart() {
+        cartItems = [];
+        updateCartDisplay();
+    }
+</script>
+</body>
+</html>
